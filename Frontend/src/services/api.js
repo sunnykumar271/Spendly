@@ -11,7 +11,7 @@ import { API_BASE_URL, TOKEN_KEY } from '../constants'
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 15000, // 15 seconds
+  timeout: 250000, // 250 seconds
 })
 
 // ── REQUEST interceptor ──────────────────────────────
