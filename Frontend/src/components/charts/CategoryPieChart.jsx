@@ -1,7 +1,7 @@
 // src/components/charts/CategoryPieChart.jsx
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { CHART_COLORS } from '../../constants'
-
+import { formatCurrency } from '../../utils'
 const CategoryPieChart = ({ report = [] }) => {
   const data = report
     .filter((r) => r.spent > 0)
@@ -17,7 +17,7 @@ const CategoryPieChart = ({ report = [] }) => {
         <Pie data={data} cx="50%" cy="45%" innerRadius={48} outerRadius={72} paddingAngle={3} dataKey="value">
           {data.map((entry, i) => <Cell key={i} fill={entry.color} strokeWidth={0} />)}
         </Pie>
-        <Tooltip formatter={(v) => [`₹${v.toLocaleString('en-IN')}`, 'Spent']} />
+        <Tooltip formatter={(value) => [formatCurrency(value), 'Spent']} />
         <Legend iconType="circle" iconSize={8} formatter={(v) => <span style={{ fontSize: 11, color: '#64748B' }}>{v}</span>} />
       </PieChart>
     </ResponsiveContainer>

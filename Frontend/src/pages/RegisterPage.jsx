@@ -13,6 +13,7 @@ const RegisterPage = () => {
   const navigate    = useNavigate()
   const { loading } = useSelector((s) => s.auth)
   const [showPwd, setShowPwd] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm()
   const pwd = watch('password')
@@ -86,16 +87,23 @@ const RegisterPage = () => {
 
         {/* Confirm Password */}
         <div>
+          
           <label className="label">Confirm password</label>
+          <div className="relative">
           <input
-            type="password"
-            placeholder="••••••••"
-            className={`input ${errors.confirmPassword ? 'input-error' : ''}`}
+             type={showConfirmPassword ? 'text' : 'password'}
+            placeholder="Enter password again"
+            className={`input pr-10${errors.confirmPassword ? 'input-error' : ''}`}
             {...register('confirmPassword', {
               required: 'Please confirm password',
               validate: (val) => val === pwd || 'Passwords do not match',
             })}
           />
+          <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600">
+              {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
           {errors.confirmPassword && <p className="error-text">{errors.confirmPassword.message}</p>}
         </div>
 

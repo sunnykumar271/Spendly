@@ -5,11 +5,17 @@ import { format, parseISO, startOfMonth, endOfMonth } from 'date-fns'
 // Format a number as Indian Rupee currency
 // e.g. formatCurrency(1500) → "₹1,500.00"
 export const formatCurrency = (amount) => {
+  const value = Number(amount) || 0;
+
+  // use scientific notation for very large/small numbers
+  if (Math.abs(value) >= 1e15 || Math.abs(value) <= 1e-6) {
+    return `${value.toPrecision(2)}`
+  }
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     minimumFractionDigits: 2,
-  }).format(amount || 0)
+  }).format(value)
 }
 
 // Format a date string to readable format
@@ -73,3 +79,4 @@ export const getBudgetBarColor = (status) => {
   }
   return map[status] || 'bg-surface-300'
 }
+

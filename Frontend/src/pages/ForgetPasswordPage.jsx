@@ -21,7 +21,7 @@ const ForgotPasswordPage = () => {
       // Pass email to verify-otp page via state
       navigate('/verify-otp', { state: { email } })
     } else {
-      toast.error(result.payload || 'Failed to send OTP')
+      toast.error(result.payload || 'Failed to send OTP or server error occurred. Please try again.')
     }
   }
 

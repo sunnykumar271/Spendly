@@ -36,7 +36,25 @@ const ReportsPage = () => {
 
   const totalSpent  = report.reduce((s, r) => s + r.spent, 0)
   const totalBudget = report.filter(r => r.budget > 0).reduce((s, r) => s + r.budget, 0)
+  const formatYAxisValue = (value) => {
+  if (value >= 1e15) {
+    return value.toExponential(1)
+  }
 
+  if (value >= 1e9) {
+    return `${(value / 1e9).toFixed(1)}B`
+  }
+
+  if (value >= 1e6) {
+    return `${(value / 1e6).toFixed(1)}M`
+  }
+
+  if (value >= 1e3) {
+    return `${(value / 1e3).toFixed(1)}K`
+  }
+
+  return value
+}
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -65,19 +83,21 @@ const ReportsPage = () => {
           </div>
         ))}
       </div>
-
+       
       {/* Trend line chart */}
       <div className="card p-5">
         <h3 className="font-display font-semibold text-surface-800 dark:text-white mb-4">Daily Spending Trend</h3>
         {trendData.length ? (
           <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={trendData}>
+            <LineChart data={trendData} margin={{ top: 10, right: 20, left: 30, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,116,139,0.1)" />
               <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94A3B8' }} axisLine={false} tickLine={false} width={50}
-                tickFormatter={(v) => `₹${v >= 1000 ? (v/1000).toFixed(0)+'k' : v}`} />
-              <Tooltip formatter={(v) => [`₹${v.toLocaleString('en-IN')}`, 'Spent']} />
-              <Line type="monotone" dataKey="amount" stroke="#2563EB" strokeWidth={2.5} dot={{ r: 4, fill: '#2563EB', strokeWidth: 0 }} activeDot={{ r: 6 }} />
+              <YAxis tick={{ fontSize: 11, fill: '#94A3B8' }} axisLine={false} tickLine={false} width={60}
+                tickFormatter={formatYAxisValue} />
+              <Tooltip 
+              contentStyle={{ borderRadius: '12px', borderColor: '#E2E8F0', backgroundColor: '#fff' }}
+              formatter={(value) => [formatCurrency(value), 'Spent']} />
+              <Line type="monotone" dataKey="amount" stroke="#2563EB" strokeWidth={4} dot={{ r: 5, fill: '#2563EB', stroke: '#fff', strokeWidth: 2 }} activeDot={{ r: 8,fill: '#2563EB' }} />
             </LineChart>
           </ResponsiveContainer>
         ) : (

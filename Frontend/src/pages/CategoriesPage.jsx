@@ -9,6 +9,7 @@ import EmptyState    from '../components/common/EmptyState'
 import { SkeletonCard } from '../components/ui/SkeletonCard'
 import CategoryForm  from '../components/forms/CategoryForm'
 import toast from 'react-hot-toast'
+import {formatCurrency} from '../utils'
 
 const CategoriesPage = () => {
   const dispatch = useDispatch()
@@ -64,7 +65,7 @@ const CategoriesPage = () => {
               <div className="flex-1 min-w-0">
                 <h3 className="font-display font-semibold text-surface-800 dark:text-white truncate">{c.name}</h3>
                 {c.budget > 0 && (
-                  <p className="text-xs text-surface-400 mt-0.5">Budget: ₹{c.budget.toLocaleString('en-IN')}</p>
+                  <p className="text-xs text-surface-400 mt-0.5">Budget: {formatCurrency(c.budget)}</p>
                 )}
               </div>
               <div className="flex gap-1 flex-shrink-0">
