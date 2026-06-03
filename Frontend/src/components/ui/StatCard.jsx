@@ -15,7 +15,11 @@ const StatCard = ({ label, value, sub, icon, color = 'blue', trend }) => {
       )}
       <div className="flex-1 min-w-0">
         <p className="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-1">{label}</p>
-        <p className="text-xl font-display font-semibold text-surface-800 dark:text-white truncate">{value}</p>
+        <p
+         className="text-xl font-display font-semibold text-surface-800 dark:text-white truncate"
+         title={String(value)}>
+          {value}
+        </p>
         {sub && <p className="text-xs text-surface-400 dark:text-surface-500 mt-0.5">{sub}</p>}
       </div>
     </div>

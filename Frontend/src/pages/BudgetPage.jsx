@@ -109,14 +109,25 @@ const BudgetPage = () => {
         <div className="space-y-4">
           <div>
             <label className="label">Monthly Budget (₹)</label>
-            <input type="number" min="0" step="100" placeholder="e.g. 5000"
-              className="input" value={budgetVal}
-              onChange={(e) => setBudgetVal(e.target.value)} />
+            <input type="number"
+             min="0" 
+             max="999999999"
+             step="100" 
+             placeholder="e.g. 5000"
+            className="input" 
+            value={budgetVal}
+            onChange={(e) => setBudgetVal(e.target.value)} />
+            {/* show error if value is to large */}
+            {Number(budgetVal) > 999999999 && (
+              <p className="error-text">Amount is too large (max ₹99Cr)</p>
+              )}
             <p className="text-xs text-surface-400 mt-1">Set to 0 to remove budget limit</p>
           </div>
           <div className="flex gap-3 justify-end">
             <button onClick={() => setEditItem(null)} className="btn-secondary btn">Cancel</button>
-            <button onClick={handleSave} disabled={saving} className="btn-primary btn">
+            <button onClick={handleSave} 
+            disabled={saving || Number(budgetVal) < 0 || Number(budgetVal) > 999999999}
+            className="btn-primary btn">
               {saving ? <Spinner size="sm" /> : 'Save Budget'}
             </button>
           </div>

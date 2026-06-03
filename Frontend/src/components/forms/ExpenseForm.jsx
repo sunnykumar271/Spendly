@@ -51,7 +51,11 @@ const ExpenseForm = ({ initial, categories = [], onSuccess }) => {
           <label className="label">Amount (₹)</label>
           <input type="number" step="0.01" min="0.01" placeholder="150.00"
             className={`input ${errors.amount ? 'input-error' : ''}`}
-            {...register('amount', { required: 'Amount is required', min: { value: 0.01, message: 'Must be positive' } })} />
+            {...register('amount', { required: 'Amount is required',
+             min: { value: 0.01, message: 'Must be positive' },
+             max: {value: 999999999, message: 'Amount is too large(max ₹99Cr)' },
+             validate: (v) => String(v).length <= 15 || 'Amount is too large',
+              })} />
           {errors.amount && <p className="error-text">{errors.amount.message}</p>}
         </div>
 

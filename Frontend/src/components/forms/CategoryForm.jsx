@@ -77,8 +77,17 @@ const CategoryForm = ({ initial, onSuccess }) => {
 
       <div>
         <label className="label">Monthly Budget (₹) <span className="text-surface-400 font-normal">(optional)</span></label>
-        <input type="number" min="0" step="100" placeholder="0"
-          className="input" {...register('budget')} />
+        <input type="number" 
+        min="0" 
+        max="999999999"
+        step="100"
+        placeholder="0"
+          className="input" {...register('budget',
+            { min: { value: 0, message: 'Must be positive' },
+              max: { value: 999999999, message: 'Amount is too large(max ₹99Cr)' },
+              validate: (v) => !v || String(v).length <= 15 || 'Amount is too large',
+            })} />
+        {errors.budget && <p className="error-text">{errors.budget.message}</p>}
       </div>
 
       <div className="flex justify-end pt-1">

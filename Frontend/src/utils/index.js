@@ -7,15 +7,60 @@ import { format, parseISO, startOfMonth, endOfMonth } from 'date-fns'
 export const formatCurrency = (amount) => {
   const value = Number(amount) || 0;
 
-  // use scientific notation for very large/small numbers
-  if (Math.abs(value) >= 1e15 || Math.abs(value) <= 1e-6) {
-    return `${value.toPrecision(2)}`
+  // Crores: 1Cr = 10,000,000
+  if (Math.abs(value) >= 10_000_000) {
+    const cr = value / 10_000_000
+    return `₹${cr % 1 === 0 ? cr : cr.toFixed(1)}Cr`
   }
+
+  // Lakhs: 1L = 100,000
+  if (Math.abs(value) >= 100_000) {
+    const lakh = value / 100_000
+    return `₹${lakh % 1 === 0 ? lakh : lakh.toFixed(1)}L`
+  }
+
+  // Thousands: 1K = 1,000
+  if (Math.abs(value) >= 1_000) {
+    const k = value / 1_000
+    return `₹${k % 1 === 0 ? k : k.toFixed(1)}K`
+  }
+
+  // Small values — show full amount
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(value)
+}
+   
+// ─────────────────────────────────────────────
+// FORMAT COMPACT NUMBER — without currency symbol
+// e.g. 10000000000 → "10B"
+// Used in charts where ₹ symbol is shown separately
+// ─────────────────────────────────────────────
+export const formatCompact = (value) => {
+  const num = Number(value) || 0
+
+  if (Math.abs(num) >= 1_000_000_000) return `${(num / 1_000_000_000).toFixed(1).replace(/\.0$/, '')}B`
+  if (Math.abs(num) >= 10_000_000)    return `${(num / 10_000_000).toFixed(1).replace(/\.0$/, '')}Cr`
+  if (Math.abs(num) >= 100_000)       return `${(num / 100_000).toFixed(1).replace(/\.0$/, '')}L`
+  if (Math.abs(num) >= 1_000)         return `${(num / 1_000).toFixed(1).replace(/\.0$/, '')}K`
+  return String(num)
+}
+// ─────────────────────────────────────────────
+// VALIDATE AMOUNT — prevents absurd values
+// Max allowed: 999,999,999 (99Cr)
+// Returns error message string or null if valid
+// ─────────────────────────────────────────────
+export const MAX_AMOUNT = 999_999_999
+
+export const validateAmount = (value) => {
+  const num = Number(value)
+  if (isNaN(num) || num <= 0)       return 'Amount must be a positive number'
+  if (num > MAX_AMOUNT)             return 'Amount is too large (max ₹99Cr)'
+  if (String(value).length > 15)    return 'Amount is too large'
+  return null // valid
 }
 
 // Format a date string to readable format
