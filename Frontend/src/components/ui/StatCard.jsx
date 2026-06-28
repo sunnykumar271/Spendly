@@ -16,14 +16,13 @@ const StatCard = ({ label, value, sub, icon, color = 'blue' }) => {
       )}
       <div className="flex-1 min-w-0">
         {/* Label */}
-        <p className="text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide mb-1 break-words">
+        <p className="text-[10px] sm:text-xs md:text-sm font-medium text-surface-500 dark:text-surface-400  leading-snug">
           {label}
         </p>
 
         {/* Value — shrinks on mobile, never truncates */}
         <p
-          className="font-display font-semibold text-surface-800 dark:text-white leading-tight
-                     text-base sm:text-lg lg:text-xl break-all"
+          className="text-[10px] sm:text-xs md:text-sm font-medium text-surface-800 dark:text-white leading-snug"
           title={String(value)}
         >
           {value}
@@ -31,7 +30,7 @@ const StatCard = ({ label, value, sub, icon, color = 'blue' }) => {
 
         {/* Sub text */}
         {sub && (
-          <p className="text-xs text-surface-400 dark:text-surface-500 mt-0.5">{sub}</p>
+          <p className="text-[10px] sm:text-xs md:text-sm  text-surface-400 dark:text-surface-500 mt-0.5">{sub}</p>
         )}
       </div>
     </div>
